@@ -18,7 +18,6 @@ from YoutubeConfig import VIDSTATS, VIDSTATSTITLES, CHANNELSTATS, DATA_DIRECTORY
 def load_data(directory):
     data = pd.DataFrame(columns=['date', 'video_title'])
     files = os.listdir(directory)
-    print(files)
     for file in files:
         for stat in VIDSTATSTITLES:
             if re.search('.*chart_{}.csv'.format(stat), file):
@@ -26,16 +25,22 @@ def load_data(directory):
                                   how='outer', on=['date', 'video_title'])
         if re.search('.*VidPub.csv', file):
             dates = pd.read_csv(directory + os.sep + file)
+            dates['date'] = dates['date'].apply(lambda x: pd.to_datetime(x).strftime('%Y-%m-%d')).astype('str')
     
-    print(data.head())
     return data, dates
 
 def graph_vid(df, dates, var):
     g = sns.lineplot(x='date', y=var, data=df, hue='video_title')
+    labels = df.date.unique()
+    labels = [str(dates[dates['date'].str.contains(d)]['name'])[2:] if 
+              dates['date'].str.contains(d).any() else '' for d in labels]
+    print(labels)
     for _, d in dates.iterrows():
-        g.axvline(d['date'], label=d['name'])
-    g.set_xticklabels(g.get_xticklabels(), rotation=90)
+        g.axvline(d['date'])
+    with sns.plotting_context(font_scale=0.5):
+        g.set_xticklabels(labels, rotation=90)
     plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    plt.show()
 
 
 def main():
