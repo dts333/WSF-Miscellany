@@ -6,11 +6,14 @@ Created on Wed Sep  4 11:40:20 2019
 @author: DannySwift
 """
 
+import googleapiclient
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+VIDSTATS = ['average_percentage_viewed', 'views']
+CHANNELSTATS = ['traffic_source_type']
 
 def graph_apv(df, dates):
     g = sns.lineplot(x='date', y='average_percentage_viewed', data=apv, hue='video_title')
