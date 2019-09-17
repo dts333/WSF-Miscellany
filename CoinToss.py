@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import time
 
 
 def toss_coins(num_coins):
@@ -45,6 +44,7 @@ def main2():
     history = [coins.sum()]
     flip = int(input("How many would you like to flip? "))
     tosses = int(input("How many times? "))
+    tosses_per_frame = int(input("How many tosses per frame? "))
     for toss in range(tosses):
         ar = np.random.binomial(1, 0.5, flip)
         which_coins = np.random.choice(num_coins, size=flip, replace=False)
@@ -60,9 +60,10 @@ def main2():
     plt.xlabel('Toss')
     
     def animate(i):
-        p = sns.lineplot(data=df[:i], legend=False)
+        p = sns.lineplot(data=df[:i * tosses_per_frame], legend=False)
         plt.setp(p.lines, color='r')
-    ani = matplotlib.animation.FuncAnimation(fig, animate, frames=tosses+2)
+    ani = matplotlib.animation.FuncAnimation(fig, animate, 
+                                             frames=int(tosses / tosses_per_frame) + 2)
     plt.show()
 
 if __name__ == '__main__':
