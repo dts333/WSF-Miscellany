@@ -6,6 +6,7 @@ Created on Mon Sep 16 16:00:56 2019
 @author: DannySwift
 """
 
+import matplotlib.animation
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -36,5 +37,38 @@ def main():
         plt.show()
         coins = int(input("How many more coins would you like to toss? "))
 
+def main2():
+    num_coins = int(input("How many coins are there? "))
+    heads = int(input("How many are heads up? "))
+    coins = np.zeros(heads) + 1
+    coins = np.append(coins, np.zeros(num_coins - heads))
+    history = [coins.sum()]
+    flip = int(input("How many would you like to flip? "))
+    tosses = int(input("How many times? "))
+    for toss in range(tosses):
+        ar = np.random.binomial(1, 0.5, flip)
+        which_coins = np.random.choice(num_coins, size=flip, replace=False)
+        for i in range(flip):
+            coins[which_coins[i]] = ar[i]
+        history.append(coins.sum())
+    df = pd.DataFrame(history)
+
+    #plt.ylim(0, num_coins)
+    #plt.xlim(0, tosses)
+    #sns.lineplot(data=df).set(ylabel='Heads', xlabel='Toss')
+    #plt.show()
+    
+    fig = plt.figure()
+    plt.ylim(0, num_coins)
+    plt.xlim(0, tosses)
+    plt.ylabel('Heads')
+    plt.xlabel('Toss')
+    
+    def animate(i):
+        p = sns.lineplot(data=df[:i], legend=False)
+        plt.setp(p.lines, color='r')
+    ani = matplotlib.animation.FuncAnimation(fig, animate, frames=tosses+2)
+    plt.show()
+
 if __name__ == '__main__':
-    main()
+    main2()
