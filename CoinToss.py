@@ -52,11 +52,6 @@ def main2():
             coins[which_coins[i]] = ar[i]
         history.append(coins.sum())
     df = pd.DataFrame(history)
-
-    #plt.ylim(0, num_coins)
-    #plt.xlim(0, tosses)
-    #sns.lineplot(data=df).set(ylabel='Heads', xlabel='Toss')
-    #plt.show()
     
     fig = plt.figure()
     plt.ylim(0, num_coins)
