@@ -23,15 +23,19 @@ mid_xs = [0]
 mid_ys = [0]
 
 def animate(i, mid_xs, mid_ys):
-    epb = 2**i - 1 #endpoints per branch
-    xs = mid_xs[-3*epb:]
-    ys = mid_ys[-3*epb:]
+    mpb = 2**i - 1 #midpoints per branch
+    xs = mid_xs[-3*mpb:]
+    ys = mid_ys[-3*mpb:]
     for j in range(3):
         start_angle = np.radians(90) + angle * j
-        for k in range(epb):
+        if mpb == 0:
+            plt.plot([0, np.cos(start_angle)], [0, np.sin(start_angle)])
+            mid_xs.append(np.cos(start_angle) / 2)
+            mid_ys.append(np.cos(start_angle) / 2)
+        for k in range(mpb):
             x, y = xs[3*j + k], ys[3*j + k]
-            a1 = start_angle + (k - epb / 2) * angle + angle 
-            a2 = start_angle + (k - epb / 2) * angle - angle
+            a1 = start_angle + (k - (mpb - 1) / 2) * angle + angle 
+            a2 = start_angle + (k - (mpb - 1) / 2) * angle - angle
             newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
             newx2, newy2 = x + np.cos(a2) / 2**i, y + np.sin(a2) / 2**i
             plt.plot([x, newx1], [y, newy1])
