@@ -17,7 +17,6 @@ n = 320
 s = 300  # Scale.
 x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
 y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
-P = np.zeros(n, m)
 angle = np.radians(120)
 mid_xs = [0]
 mid_ys = [0]
@@ -31,11 +30,12 @@ def animate(i, mid_xs, mid_ys):
         if mpb == 0:
             plt.plot([0, np.cos(start_angle)], [0, np.sin(start_angle)])
             mid_xs.append(np.cos(start_angle) / 2)
-            mid_ys.append(np.cos(start_angle) / 2)
+            mid_ys.append(np.sin(start_angle) / 2)
         for k in range(mpb):
-            x, y = xs[3*j + k], ys[3*j + k]
-            a1 = start_angle + (k - (mpb - 1) / 2) * angle + angle 
-            a2 = start_angle + (k - (mpb - 1) / 2) * angle - angle
+            x, y = xs[j*mpb + k], ys[j*mpb + k]
+            a = start_angle + mpb - 2**k * angle
+            a1 = a + angle 
+            a2 = a - angle
             newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
             newx2, newy2 = x + np.cos(a2) / 2**i, y + np.sin(a2) / 2**i
             plt.plot([x, newx1], [y, newy1])
