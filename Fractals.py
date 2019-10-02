@@ -20,9 +20,12 @@ y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
 angle = np.radians(120)
 mid_xs = [0]
 mid_ys = [0]
+start_angle = np.radians(90)
 
 def animate(i, mid_xs, mid_ys):
-    mpb = 2**i - 1 #midpoints per branch
+    mpb = 2**(i-1) #midpoints per branch
+    if mpb == 0.5:
+        mpb = 0
     xs = mid_xs[-3*mpb:]
     ys = mid_ys[-3*mpb:]
     for j in range(3):
@@ -33,7 +36,7 @@ def animate(i, mid_xs, mid_ys):
             mid_ys.append(np.sin(start_angle) / 2)
         for k in range(mpb):
             x, y = xs[j*mpb + k], ys[j*mpb + k]
-            a = start_angle + mpb - 2**k * angle
+            a = start_angle + (mpb - 2*k - 1) * angle
             a1 = a + angle 
             a2 = a - angle
             newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
@@ -45,6 +48,26 @@ def animate(i, mid_xs, mid_ys):
             mid_ys.append((y + newy1) / 2)
             mid_ys.append((y + newy2) / 2)
             
+            
+def animate(i, mid_xs, mid_ys):
+    bp = 3**i #branchpoints
+    xs = mid_xs[-bp:]
+    ys = mid_ys[-bp:]
+    for k in range(bp):
+        x, y = xs[k], ys[k]
+        a = start_angle + k * angle
+        a1 = a + angle 
+        a2 = a - angle
+        newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
+        newx2, newy2 = x + np.cos(a2) / 2**i, y + np.sin(a2) / 2**i
+        plt.plot([x, newx1], [y, newy1])
+        plt.plot([x, newx2], [y, newy2])
+        mid_xs.append((x + np.cos(a)) / 2)
+        mid_xs.append((x + newx1) / 2)
+        mid_xs.append((x + newx2) / 2)
+        mid_ys.append((y + np.sin(a)) / 2)
+        mid_ys.append((y + newy1) / 2)
+        mid_ys.append((y + newy2) / 2)
             
         
         
