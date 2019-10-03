@@ -15,12 +15,14 @@ m = 480
 n = 320
  
 s = 300  # Scale.
+iterations=10
 x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
 y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
+start_angle = np.radians(90)
 angle = np.radians(120)
+angles = [start_angle]
 mid_xs = [0]
 mid_ys = [0]
-start_angle = np.radians(90)
 
 def animate(i, mid_xs, mid_ys):
     mpb = 2**(i-1) #midpoints per branch
@@ -49,25 +51,31 @@ def animate(i, mid_xs, mid_ys):
             mid_ys.append((y + newy2) / 2)
             
             
-def animate(i, mid_xs, mid_ys):
+def animate(i, mid_xs, mid_ys, angles):
     bp = 3**i #branchpoints
+    if i==0:
+        plt.plot([0,0], [0,1])
     xs = mid_xs[-bp:]
     ys = mid_ys[-bp:]
+    bpangles = angles[-bp:]
     for k in range(bp):
         x, y = xs[k], ys[k]
-        a = start_angle + k * angle
+        a = bpangles[k]
         a1 = a + angle 
         a2 = a - angle
         newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
         newx2, newy2 = x + np.cos(a2) / 2**i, y + np.sin(a2) / 2**i
         plt.plot([x, newx1], [y, newy1])
         plt.plot([x, newx2], [y, newy2])
-        mid_xs.append((x + np.cos(a)) / 2)
+        mid_xs.append(x + (np.cos(a) / 2**i) / 2)
         mid_xs.append((x + newx1) / 2)
         mid_xs.append((x + newx2) / 2)
-        mid_ys.append((y + np.sin(a)) / 2)
+        mid_ys.append(y + (np.sin(a) / 2**i) / 2)
         mid_ys.append((y + newy1) / 2)
         mid_ys.append((y + newy2) / 2)
+        angles.append(a)
+        angles.append(a1)
+        angles.append(a2)
             
         
         
@@ -75,10 +83,11 @@ def animate(i, mid_xs, mid_ys):
 
 if __name__ == '__main__':
     fig = plt.figure()
-    fig.set_size_inches(m / 100, n / 100)
+    #fig.set_size_inches(m / 100, n / 100)
     ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1)
     ax.set_xticks([])
     ax.set_yticks([])
     
-    ani = animation.FuncAnimation(fig, animate, frames=iterations, fargs=(mid_xs, mid_ys))
+    ani = animation.FuncAnimation(fig, animate, frames=iterations, fargs=(mid_xs, mid_ys, angles), interval=2000)
+    plt.show()
     
