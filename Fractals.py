@@ -15,7 +15,7 @@ m = 480
 n = 320
  
 s = 300  # Scale.
-iterations=10
+iterations=5
 x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
 y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
 start_angle = np.radians(90)
@@ -26,17 +26,14 @@ mid_ys = [0]
 lines=[]
             
             
-def animate(i, mid_xs, mid_ys, angles):
+def animate(i):
     bp = 3**i #branchpoints
     xs = mid_xs[-bp:]
     ys = mid_ys[-bp:]
+    bpangles = angles[-bp:]
     if i==0:
         lines.append(ax.plot([],[],lw=1, color='g')[0])
         lines[0].set_data([0,0], [0,1])
-        mid_xs.append(0)
-        mid_ys.append(0.5)
-        angles.append(start_angle)
-    bpangles = angles[-bp:]
     for k in range(bp):
         lines.append(ax.plot([],[],lw=1, color='g')[0])
         lines.append(ax.plot([],[],lw=1, color='g')[0])
@@ -61,7 +58,8 @@ def animate(i, mid_xs, mid_ys, angles):
     return lines
             
         
-        
+def init_func():
+    pass     
 
 
 if __name__ == '__main__':
@@ -73,6 +71,6 @@ if __name__ == '__main__':
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
     
-    ani = animation.FuncAnimation(fig, animate, frames=iterations, fargs=(mid_xs, mid_ys, angles), interval=2000)
+    ani = animation.FuncAnimation(fig, animate, init_func=init_func, frames=iterations, interval=2000, repeat=False)
     plt.show()
     
