@@ -23,6 +23,7 @@ angle = np.radians(120)
 angles = [start_angle]
 mid_xs = [0]
 mid_ys = [0]
+lines=[]
 
 def animate(i, mid_xs, mid_ys):
     mpb = 2**(i-1) #midpoints per branch
@@ -54,19 +55,22 @@ def animate(i, mid_xs, mid_ys):
 def animate(i, mid_xs, mid_ys, angles):
     bp = 3**i #branchpoints
     if i==0:
-        plt.plot([0,0], [0,1])
+        lines.append(ax.plot([][],lw=2)[0])
+        lines[0].set_data([0,0], [0,1])
     xs = mid_xs[-bp:]
     ys = mid_ys[-bp:]
     bpangles = angles[-bp:]
     for k in range(bp):
+        lines.append(ax.plot([],[],lw=2)[0])
+        lines.append(ax.plot([],[],lw=2)[0])
         x, y = xs[k], ys[k]
         a = bpangles[k]
         a1 = a + angle 
         a2 = a - angle
         newx1, newy1 = x + np.cos(a1) / 2**i, y + np.sin(a1) / 2**i
         newx2, newy2 = x + np.cos(a2) / 2**i, y + np.sin(a2) / 2**i
-        plt.plot([x, newx1], [y, newy1])
-        plt.plot([x, newx2], [y, newy2])
+        lines[-1].set_data([x, newx1], [y, newy1])
+        lines[-2].set_data([x, newx2], [y, newy2])
         mid_xs.append(x + (np.cos(a) / 2**i) / 2)
         mid_xs.append((x + newx1) / 2)
         mid_xs.append((x + newx2) / 2)
@@ -76,6 +80,8 @@ def animate(i, mid_xs, mid_ys, angles):
         angles.append(a)
         angles.append(a1)
         angles.append(a2)
+    
+    return lines
             
         
         
