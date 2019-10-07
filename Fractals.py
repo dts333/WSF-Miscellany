@@ -15,7 +15,7 @@ m = 480
 n = 320
  
 s = 300  # Scale.
-iterations=5
+iterations=7
 x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
 y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
 start_angle = np.radians(90)
@@ -59,18 +59,19 @@ def animate(i):
             
         
 def init_func():
-    pass     
+    fig.patch.set_facecolor('xkcd:sky')
 
 
 if __name__ == '__main__':
-    fig = plt.figure()
-    #fig.set_size_inches(m / 100, n / 100)
-    ax = plt.axes(xlim=(-1,1), ylim=(-1,1))
+    fig, ax = plt.subplots(frameon=False)
+    #figure(xlim=(-1,1), ylim=(-1,1), frameon=False)
+    fig.patch.set_facecolor('xkcd:sky')
+    ax.set_facecolor('xkcd:sky')
     ax.set_xticks([])
     ax.set_yticks([])
     plt.xlim(-1, 1)
-    plt.ylim(-1, 1)
+    plt.ylim(-0.7, 1.3)
     
-    ani = animation.FuncAnimation(fig, animate, init_func=init_func, frames=iterations, interval=2000, repeat=False)
+    ani = animation.FuncAnimation(fig, animate, init_func=init_func, frames=iterations, interval=1500, repeat=False)
     plt.show()
     
