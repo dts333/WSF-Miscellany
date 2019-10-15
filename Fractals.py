@@ -12,8 +12,6 @@ import matplotlib.pyplot as plt
 import numpy as np
  
 iterations=7
-x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
-y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
 start_angle = np.radians(90)
 angle = np.radians(45)
 angles = [start_angle]
