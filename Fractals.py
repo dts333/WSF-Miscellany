@@ -10,16 +10,12 @@ import matplotlib
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-
-m = 480
-n = 320
  
-s = 300  # Scale.
 iterations=7
 x = np.linspace(-m / s, m / s, num=m).reshape((1, m))
 y = np.linspace(-n / s, n / s, num=n).reshape((n, 1))
 start_angle = np.radians(90)
-angle = np.radians(120)
+angle = np.radians(45)
 angles = [start_angle]
 mid_xs = [0]
 mid_ys = [0]
@@ -60,12 +56,13 @@ def animate(i):
         
 def init_func():
     fig.patch.set_facecolor('xkcd:sky')
+    
+    return lines
 
 
 if __name__ == '__main__':
     fig, ax = plt.subplots(frameon=False)
-    #figure(xlim=(-1,1), ylim=(-1,1), frameon=False)
-    fig.patch.set_facecolor('xkcd:sky')
+    fig.set_facecolor('xkcd:sky')
     ax.set_facecolor('xkcd:sky')
     ax.set_xticks([])
     ax.set_yticks([])
