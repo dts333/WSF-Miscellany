@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Oct  2 12:44:25 2019
-
 @author: DannySwift
 """
 
+import IPython.display as IPdisplay
 import matplotlib
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+import io
+
+from PIL import Image
  
 iterations=7
 start_angle = np.radians(90)
@@ -50,12 +53,6 @@ def animate(i):
         angles.append(a2)
     
     return lines
-            
-        
-def init_func():
-    fig.patch.set_facecolor('xkcd:sky')
-    
-    return lines
 
 
 if __name__ == '__main__':
@@ -66,7 +63,29 @@ if __name__ == '__main__':
     ax.set_yticks([])
     plt.xlim(-1, 1)
     plt.ylim(-0.7, 1.3)
+
+    images = []
+    sio = io.StringIO()
     
-    ani = animation.FuncAnimation(fig, animate, init_func=init_func, frames=iterations, interval=1500, repeat=False)
-    plt.show()
+    for i in range(iterations):
+  
+      canvas = plt.get_current_fig_manager().canvas
+      canvas.draw()
+      pil_image = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
+      images.append(pil_image)
+
+      animate(i)
     
+
+    gif_filepath = 'fractal{}.gif'.format(str(angle))
+
+
+    images[0].save(
+      gif_filepath,
+      save_all=True,
+      format='GIF',
+      append_images=images[1:],
+      loop=0,
+      duration=1000
+    )
+    IPdisplay.Image(url=gif_filepath)
